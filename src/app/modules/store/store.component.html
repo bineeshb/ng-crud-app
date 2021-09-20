@@ -1,0 +1,13 @@
+<div class="flex justify-content-between p-4">
+  <h2 class="m-0">{{ isMasterStore ? 'Master' : 'My' }} Store</h2>
+  <div class="flex align-items-center">
+    Welcome User !
+    <p-button label="Logout" icon="pi pi-power-off" styleClass="ml-3 p-button-warning"></p-button>
+  </div>
+</div>
+<div class="grid h-full">
+  <div class="col-12 md:col-10 md:col-offset-1">
+    <app-master-store *ngIf="isMasterStore"></app-master-store>
+    <app-user-store *ngIf="!isMasterStore"></app-user-store>
+  </div>
+</div>

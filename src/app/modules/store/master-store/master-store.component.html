@@ -1,0 +1,52 @@
+<h3>Available Items</h3>
+<div class="grid">
+  <div class="col-12 md:col-6">
+    <p-fieldset legend="Add an Item">
+      <form class="formgrid grid" novalidate>
+        <div class="field col-6">
+          <input type="text" id="name" class="inputfield w-full" pInputText placeholder="Name" />
+        </div>
+        <div class="field col-4">
+          <p-inputNumber [showButtons]="true" buttonLayout="horizontal" inputId="quantity" spinnerMode="horizontal"
+            class="inputfield w-full" inputStyleClass="w-full text-center" placeholder="Quantity" decrementButtonClass="p-button-danger"
+            incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [min]="1">
+          </p-inputNumber>
+        </div>
+        <div class="field col-2 text-right">
+          <button pButton type="button" label="Add"></button>
+        </div>
+      </form>
+    </p-fieldset>
+    <p-table styleClass="mt-3 p-datatable-striped" [value]="availableItems">
+      <ng-template pTemplate="header">
+        <tr>
+          <th *ngFor="let col of cols" [pSortableColumn]="col.field">
+            <div class="flex justify-content-between">
+              <span>{{ col.header }}</span>
+              <p-sortIcon [field]="col.field"></p-sortIcon>
+            </div>
+          </th>
+          <th></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-item>
+        <tr>
+          <td *ngFor="let col of cols">
+            <ng-container *ngIf="col.field === 'quantity'; else defaultTemplate">
+              <p-inputNumber [showButtons]="true" buttonLayout="horizontal" inputId="quantity" spinnerMode="horizontal"
+                [min]="1" inputStyleClass="text-center w-full" decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success"
+                incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [(ngModel)]="item.quantity">
+              </p-inputNumber>
+            </ng-container>
+            <ng-template #defaultTemplate>
+              {{ item[col.field] }}
+            </ng-template>
+          </td>
+          <td class="text-right">
+            <button pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger"></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

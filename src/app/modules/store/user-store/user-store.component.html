@@ -1,0 +1,36 @@
+<div class="grid">
+  <div class="col-12 md:col-4">
+    <p-dataView [value]="availableItems">
+      <ng-template pTemplate="header">Available Items</ng-template>
+      <ng-template let-item pTemplate="listItem">
+        <div class="col-7 p-4">
+          <div class="text-2xl">{{ item.name }}</div>
+        </div>
+        <div class="col-5 p-4 text-right">
+          <div class="font-bold text-2xl">{{ item.quantity }}</div>
+          <div class="p-inputgroup mt-2">
+            <p-inputNumber [(ngModel)]="minQuantity" [min]="minQuantity" [max]="item.quantity" inputStyleClass="text-center"></p-inputNumber>
+            <button type="button" pButton pRipple label="Buy" class="p-button-danger"></button>
+          </div>
+        </div>
+      </ng-template>
+    </p-dataView>
+  </div>
+  <div class="col-12 md:col-4">
+    <p-dataView [value]="storeItems">
+      <ng-template pTemplate="header">In My Store</ng-template>
+      <ng-template let-item pTemplate="listItem">
+        <div class="col-7 p-4">
+          <div class="text-2xl">{{ item.name }}</div>
+        </div>
+        <div class="col-5 p-4 text-right">
+          <div class="font-bold text-2xl">{{ item.quantity }}</div>
+          <div class="p-inputgroup mt-2">
+            <p-inputNumber [(ngModel)]="minQuantity" [min]="minQuantity" [max]="item.quantity" inputStyleClass="text-center"></p-inputNumber>
+            <button type="button" pButton pRipple label="Sell" class="p-button-success"></button>
+          </div>
+        </div>
+      </ng-template>
+    </p-dataView>
+  </div>
+</div>
