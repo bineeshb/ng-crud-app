@@ -21,7 +21,9 @@
       "dom"
     ],
     "paths": {
-      "@modules/*": ["src/app/modules/*"]
+      "@config/*": ["src/app/config/*"],
+      "@modules/*": ["src/app/modules/*"],
+      "@services/*": ["src/app/services/*"]
     }
   },
   "angularCompilerOptions": {

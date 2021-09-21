@@ -5,7 +5,7 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './store.component.html'
 })
 export class StoreComponent implements OnInit {
-  isMasterStore = false;
+  isMasterStore = true;
 
   constructor() { }
 
