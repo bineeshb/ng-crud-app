@@ -21,8 +21,13 @@
       "dom"
     ],
     "paths": {
+      "@config": ["src/app/config"],
       "@config/*": ["src/app/config/*"],
+      "@interfaces": ["src/app/interfaces"],
+      "@interfaces/*": ["src/app/interfaces/*"],
+      "@env/*": ["src/environments/*"],
       "@modules/*": ["src/app/modules/*"],
+      "@services": ["src/app/services"],
       "@services/*": ["src/app/services/*"]
     }
   },
