@@ -23,12 +23,16 @@
     "paths": {
       "@config": ["src/app/config"],
       "@config/*": ["src/app/config/*"],
+      "@interceptors": ["src/app/interceptors"],
+      "@interceptors/*": ["src/app/interceptors/*"],
       "@interfaces": ["src/app/interfaces"],
       "@interfaces/*": ["src/app/interfaces/*"],
       "@env/*": ["src/environments/*"],
       "@modules/*": ["src/app/modules/*"],
       "@services": ["src/app/services"],
-      "@services/*": ["src/app/services/*"]
+      "@services/*": ["src/app/services/*"],
+      "@shared": ["src/app/shared"],
+      "@shared/*": ["src/app/shared/*"]
     }
   },
   "angularCompilerOptions": {

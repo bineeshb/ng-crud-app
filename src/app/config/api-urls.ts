@@ -2,6 +2,7 @@ import { environment } from '@env/environment';
 
 export const placeholderItemID = '<ITEM_ID>';
 
+const apiRoot = `${environment.apiBase}/api/v1`;
 const ENDPOINTS_USER = {
   signup: 'signup',
   login: 'login',
@@ -34,6 +35,6 @@ function joinUrls<Type>(apiRoot: string, endpoints: Type): Type {
   );
 }
 
-export const API_USER: User = joinUrls<User>(environment.apiBase, ENDPOINTS_USER);
-export const API_MASTER_STORE: MasterStore = joinUrls<MasterStore>(`${environment.apiBase}/available-items`, ENDPOINTS_MASTER_STORE);
-export const API_USER_STORE: UserStore = joinUrls<UserStore>(`${environment.apiBase}/store-items`, ENDPOINTS_USER_STORE);
+export const API_USER: User = joinUrls<User>(apiRoot, ENDPOINTS_USER);
+export const API_MASTER_STORE: MasterStore = joinUrls<MasterStore>(`${apiRoot}/available-items`, ENDPOINTS_MASTER_STORE);
+export const API_USER_STORE: UserStore = joinUrls<UserStore>(`${apiRoot}/store-items`, ENDPOINTS_USER_STORE);

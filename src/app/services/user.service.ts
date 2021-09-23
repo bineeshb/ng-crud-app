@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 import { API_USER } from '@config/api-urls';
 import { LoginRequest, LoginResponse, MessageResponse, SignupRequest } from '@interfaces';
@@ -9,6 +10,7 @@ import { LoginRequest, LoginResponse, MessageResponse, SignupRequest } from '@in
   providedIn: 'root'
 })
 export class UserService {
+  userDetails: LoginResponse | null = null;
 
   constructor(private readonly http: HttpClient) { }
 
@@ -17,10 +19,16 @@ export class UserService {
   }
 
   login(loginRequest: LoginRequest): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(API_USER.login, loginRequest);
+    return this.http.post<LoginResponse>(API_USER.login, loginRequest)
+      .pipe(
+        tap(response => this.userDetails = response)
+      );
   }
 
   logout(): Observable<MessageResponse> {
-    return this.http.get<MessageResponse>(API_USER.logout);
+    return this.http.get<MessageResponse>(API_USER.logout)
+      .pipe(
+        tap(() => this.userDetails = null)
+      );
   }
 }

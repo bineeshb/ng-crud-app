@@ -1,11 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, ValidationErrors, Validators } from '@angular/forms';
 
+import { LoginRequest } from '@interfaces/user';
+import { UserService } from '@services/user.service';
+import { AutoUnsubscribeComponent } from '@shared/components/auto-unsubscribe';
+
 @Component({
   selector: 'app-login-signup',
   templateUrl: './login-signup.component.html'
 })
-export class LoginSignupComponent implements OnInit {
+export class LoginSignupComponent extends AutoUnsubscribeComponent implements OnInit {
   loginForm = this.fb.group({
     username: [null, Validators.required],
     password: [null, Validators.required]
@@ -17,7 +21,12 @@ export class LoginSignupComponent implements OnInit {
     // confirmPassword: [null, Validators.required]
   });
 
-  constructor(private readonly fb: FormBuilder) { }
+  constructor(
+    private readonly fb: FormBuilder,
+    private readonly userService: UserService
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
   }
@@ -35,18 +44,24 @@ export class LoginSignupComponent implements OnInit {
   }
 
   loginUser(): void {
-    console.log(this.loginForm.value);
+    // console.log(this.loginForm.value);
+    const loginRequest: LoginRequest = {
+      username: this.loginUsername?.value,
+      password: this.loginPassword?.value
+    };
+    const loginSub = this.userService.login(loginRequest).subscribe(response => console.log(response));
+    this.addSubscriptions(loginSub);
   }
 
   signupUser(): void {
     console.log(this.signupForm.value);
   }
 
-  get username(): AbstractControl | null {
+  get loginUsername(): AbstractControl | null {
     return this.loginForm.get('username');
   }
 
-  get password(): AbstractControl | null {
+  get loginPassword(): AbstractControl | null {
     return this.loginForm.get('password');
   }
 }
