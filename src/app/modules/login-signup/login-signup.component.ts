@@ -48,11 +48,7 @@ export class LoginSignupComponent extends AutoUnsubscribeComponent implements On
 
   loginUser(): void {
     this.toastMessageService.clear();
-    const loginRequest: LoginRequest = {
-      username: this.loginUsername?.value,
-      password: this.loginPassword?.value
-    };
-    const loginSub = this.userService.login(loginRequest).subscribe(response => {
+    const loginSub = this.userService.login(this.loginForm.value).subscribe(response => {
       if (response.userName) {
         this.router.navigate(['/']);
       }
@@ -62,7 +58,11 @@ export class LoginSignupComponent extends AutoUnsubscribeComponent implements On
 
   signupUser(): void {
     this.toastMessageService.clear();
-    console.log(this.signupForm.value);
+    const signupSub = this.userService.signup(this.signupForm.value).subscribe(response => {
+      this.signupForm.reset();
+      this.toastMessageService.showSuccessMessages([ 'User account created successfully. Please use the credentials to login.' ]);
+    });
+    this.addSubscriptions(signupSub);
   }
 
   get loginUsername(): AbstractControl | null {

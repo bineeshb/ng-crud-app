@@ -9,7 +9,16 @@ import { TOAST_DEFAULTS, TOAST_SEVERITIES } from './toast-message.constants';
   providedIn: 'root'
 })
 export class ToastMessageService {
-  messagesDisplayed: Message[] = [];
+  private messagesDisplayed: Message[] = [];
+  showSuccessMessages = this.setDefaultsAndShowMessages({
+    summary: 'Success',
+    severity: TOAST_SEVERITIES.success
+  });
+  showErrorMessages = this.setDefaultsAndShowMessages({
+    summary: 'Error',
+    severity: TOAST_SEVERITIES.error,
+    sticky: true
+  });
 
   constructor(private readonly messageService: MessageService) { }
 
@@ -35,21 +44,20 @@ export class ToastMessageService {
     this.messagesDisplayed.push(...displayMessages);
   }
 
-  showErrorMessages(errorMessages: string[] | Partial<Message[]>): void {
-    if ((errorMessages as string[]).every(message => typeof message === 'string')) {  
-      errorMessages = (errorMessages as string[]).map(errorMessage => ({
-        summary: 'Error',
-        detail: errorMessage
+  private setDefaultsAndShowMessages(messageDefaults: Message) {
+    return (messages: string[] | Partial<Message[]>): void => {
+      if ((messages as string[]).every(message => typeof message === 'string')) {  
+        messages = (messages as string[]).map(message => ({
+          detail: message
+        }));
+      }
+
+      messages = (messages as Message[]).map(message => ({
+        ...messageDefaults,
+        ...message
       }));
+
+      this.showMessages(messages);
     }
-
-    const displayMessages = (errorMessages as Message[]).map(errorMessage => ({
-      ...TOAST_DEFAULTS,
-      sticky: true,
-      severity: TOAST_SEVERITIES.error,
-      ...errorMessage
-    }));
-
-    this.showMessages(displayMessages);
   }
 }
