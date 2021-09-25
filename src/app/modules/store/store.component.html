@@ -2,7 +2,8 @@
   <h2 class="m-0">{{ isMasterStore ? 'Master' : 'My' }} Store</h2>
   <div class="flex align-items-center">
     Welcome {{ userName }} !
-    <p-button label="Logout" icon="pi pi-power-off" styleClass="ml-3 p-button-warning"></p-button>
+    <p-button label="Logout" icon="pi pi-power-off" styleClass="ml-3 p-button-warning"
+      (click)="logoutUser()"></p-button>
   </div>
 </div>
 <div class="grid grid-nogutter h-full mt-3">

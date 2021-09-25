@@ -34,7 +34,6 @@ export class ApiErrorInterceptor implements HttpInterceptor {
             summary,
             detail: error?.message || message
           }]);
-          console.log(httpError);
 
           return throwError(httpError);
         })

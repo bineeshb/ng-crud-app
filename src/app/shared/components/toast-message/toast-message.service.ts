@@ -1,27 +1,38 @@
 import { Injectable } from '@angular/core';
+import { isEqual } from 'lodash';
 
 import { Message, MessageService } from 'primeng/api';
 
-import { TOAST_CONSTANTS, TOAST_SEVERITIES } from './toast-message.constants';
+import { TOAST_DEFAULTS, TOAST_SEVERITIES } from './toast-message.constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ToastMessageService {
+  messagesDisplayed: Message[] = [];
 
   constructor(private readonly messageService: MessageService) { }
 
   clear(): void {
-    this.messageService.clear(TOAST_CONSTANTS.key);
+    this.messageService.clear(TOAST_DEFAULTS.key);
+    this.messagesDisplayed = [];
   }
 
   showMessages(messages: Message[]): void {
-    const displayMessages: Message[] = messages.map(message => ({
-      ...message,
-      key: TOAST_CONSTANTS.key
-    }));
+    const displayMessages: Message[] = messages
+      .filter(
+        (checkMessage, checkMessageIndex) => (
+          !this.messagesDisplayed.some(message => isEqual(message, checkMessage))
+          && !messages.some((message, i) => checkMessageIndex !== i && isEqual(message, checkMessage))
+        )
+      )
+      .map(message => ({
+        ...TOAST_DEFAULTS,
+        ...message
+      }));
 
     this.messageService.addAll(displayMessages);
+    this.messagesDisplayed.push(...displayMessages);
   }
 
   showErrorMessages(errorMessages: string[] | Partial<Message[]>): void {
@@ -33,7 +44,8 @@ export class ToastMessageService {
     }
 
     const displayMessages = (errorMessages as Message[]).map(errorMessage => ({
-      key: TOAST_CONSTANTS.key,
+      ...TOAST_DEFAULTS,
+      sticky: true,
       severity: TOAST_SEVERITIES.error,
       ...errorMessage
     }));

@@ -3,8 +3,8 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { ToastMessageModule } from '@shared/components/toast-message/toast-message.module';
-import { ApiErrorInterceptor } from '@interceptors/api-error.interceptor';
+import { LoaderModule, ToastMessageModule } from '@shared/components';
+import { ApiErrorInterceptor, LoaderInterceptor } from '@interceptors';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
@@ -17,9 +17,15 @@ import { AppComponent } from './app.component';
     BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
+    LoaderModule,
     ToastMessageModule
   ],
   providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: LoaderInterceptor,
+      multi: true
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ApiErrorInterceptor,

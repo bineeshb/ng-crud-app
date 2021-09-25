@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, ValidationErrors, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { LoginRequest } from '@interfaces/user';
 import { UserService } from '@services/user.service';
-import { AutoUnsubscribeComponent } from '@shared/components/auto-unsubscribe';
+import { AutoUnsubscribeComponent, ToastMessageService } from '@shared/components';
 
 @Component({
   selector: 'app-login-signup',
@@ -23,6 +24,8 @@ export class LoginSignupComponent extends AutoUnsubscribeComponent implements On
 
   constructor(
     private readonly fb: FormBuilder,
+    private readonly router: Router,
+    private readonly toastMessageService: ToastMessageService,
     private readonly userService: UserService
   ) {
     super();
@@ -44,16 +47,21 @@ export class LoginSignupComponent extends AutoUnsubscribeComponent implements On
   }
 
   loginUser(): void {
-    // console.log(this.loginForm.value);
+    this.toastMessageService.clear();
     const loginRequest: LoginRequest = {
       username: this.loginUsername?.value,
       password: this.loginPassword?.value
     };
-    const loginSub = this.userService.login(loginRequest).subscribe(response => console.log(response));
+    const loginSub = this.userService.login(loginRequest).subscribe(response => {
+      if (response.userName) {
+        this.router.navigate(['/']);
+      }
+    });
     this.addSubscriptions(loginSub);
   }
 
   signupUser(): void {
+    this.toastMessageService.clear();
     console.log(this.signupForm.value);
   }
 
