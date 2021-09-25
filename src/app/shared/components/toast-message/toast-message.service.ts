@@ -27,21 +27,29 @@ export class ToastMessageService {
     this.messagesDisplayed = [];
   }
 
+  removeInDisplayedList(message: Message): void {
+    this.messagesDisplayed = this.messagesDisplayed.filter(
+      displayedMessage => !isEqual(displayedMessage, message)
+    );
+  }
+
   showMessages(messages: Message[]): void {
     const displayMessages: Message[] = messages
-      .filter(
-        (checkMessage, checkMessageIndex) => (
-          !this.messagesDisplayed.some(message => isEqual(message, checkMessage))
-          && !messages.some((message, i) => checkMessageIndex !== i && isEqual(message, checkMessage))
-        )
-      )
       .map(message => ({
         ...TOAST_DEFAULTS,
         ...message
-      }));
+      }))
+      .filter((checkMessage, checkMessageIndex) => {
+        const isDisplayed = this.messagesDisplayed.some(message => isEqual(message, checkMessage));
+        const isDuplicate = !isDisplayed && messages.some((message, i) => checkMessageIndex !== i && isEqual(message, checkMessage));
 
-    this.messageService.addAll(displayMessages);
-    this.messagesDisplayed.push(...displayMessages);
+        return !isDisplayed && !isDuplicate;
+      });
+
+    if (displayMessages.length > 0) {
+      this.messageService.addAll(displayMessages);
+      this.messagesDisplayed.push(...displayMessages);
+    }
   }
 
   private setDefaultsAndShowMessages(messageDefaults: Message) {
