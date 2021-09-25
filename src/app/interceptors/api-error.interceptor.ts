@@ -5,6 +5,7 @@ import {
   HttpEvent,
   HttpInterceptor
 } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
@@ -15,6 +16,7 @@ import { UserService } from '@services/user.service';
 export class ApiErrorInterceptor implements HttpInterceptor {
 
   constructor(
+    private readonly router: Router,
     private readonly toastMessageService: ToastMessageService,
     private readonly userService: UserService
   ) {}
@@ -24,9 +26,8 @@ export class ApiErrorInterceptor implements HttpInterceptor {
       .pipe(
         catchError(httpError => {
           if (httpError.status === 401) {
-            // redirect to login
-            // clear jwt cookie
-            this.userService.userDetails = null;
+            this.userService.userDetails.next(null);
+            this.router.navigate(['/login']);
           }
 
           const { statusText: summary, message, error } = httpError;

@@ -32,6 +32,9 @@ export class LoginSignupComponent extends AutoUnsubscribeComponent implements On
   }
 
   ngOnInit(): void {
+    if (this.userService.isUserLoggedIn) {
+      this.router.navigate(['/']);
+    }
   }
 
   getLoginFieldErrors(fieldRef: string): ValidationErrors | null {

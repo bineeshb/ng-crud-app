@@ -20,8 +20,8 @@ export class StoreComponent extends AutoUnsubscribeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.userName = this.userService.userDetails?.userName || null;
-    this.isMasterStore = this.userService.userDetails?.role === 'admin';
+    this.userName = this.userService.userDetails.value?.userName || null;
+    this.isMasterStore = this.userService.userDetails.value?.role === 'admin';
   }
 
   logoutUser(): void {

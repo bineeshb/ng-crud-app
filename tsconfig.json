@@ -22,6 +22,8 @@
       "dom"
     ],
     "paths": {
+      "@auth": ["src/app/auth"],
+      "@auth/*": ["src/app/auth/*"],
       "@config": ["src/app/config"],
       "@config/*": ["src/app/config/*"],
       "@interceptors": ["src/app/interceptors"],
