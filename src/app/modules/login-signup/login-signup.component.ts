@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AbstractControl, FormBuilder, ValidationErrors, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { LoginRequest } from '@interfaces/user';
 import { UserService } from '@services/user.service';
 import { AutoUnsubscribeComponent, ToastMessageService } from '@shared/components';
 
@@ -10,7 +9,7 @@ import { AutoUnsubscribeComponent, ToastMessageService } from '@shared/component
   selector: 'app-login-signup',
   templateUrl: './login-signup.component.html'
 })
-export class LoginSignupComponent extends AutoUnsubscribeComponent implements OnInit {
+export class LoginSignupComponent extends AutoUnsubscribeComponent {
   loginForm = this.fb.group({
     username: [null, Validators.required],
     password: [null, Validators.required]
@@ -29,12 +28,6 @@ export class LoginSignupComponent extends AutoUnsubscribeComponent implements On
     private readonly userService: UserService
   ) {
     super();
-  }
-
-  ngOnInit(): void {
-    if (this.userService.isUserLoggedIn) {
-      this.router.navigate(['/']);
-    }
   }
 
   getLoginFieldErrors(fieldRef: string): ValidationErrors | null {

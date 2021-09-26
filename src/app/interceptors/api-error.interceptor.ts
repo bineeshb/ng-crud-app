@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
+import { ROUTE_PATHS } from '@config/constants';
 import { ToastMessageService } from '@shared/components/toast-message/toast-message.service';
 import { UserService } from '@services/user.service';
 
@@ -27,7 +28,7 @@ export class ApiErrorInterceptor implements HttpInterceptor {
         catchError(httpError => {
           if (httpError.status === 401) {
             this.userService.userDetails.next(null);
-            this.router.navigate(['/login']);
+            this.router.navigate([ ROUTE_PATHS.login ]);
           }
 
           const { statusText: summary, message, error } = httpError;
