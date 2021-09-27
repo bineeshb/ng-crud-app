@@ -2,25 +2,27 @@
   <div class="col-12 md:col-6">
     <h3 class="mt-0">Available Items</h3>
     <p-fieldset legend="Add an Item">
-      <form class="formgrid grid" novalidate>
+      <form class="formgrid grid" [formGroup]="formAddItem" (ngSubmit)="addNewItem()">
         <div class="field col-6">
-          <input type="text" id="name" class="inputfield w-full" pInputText placeholder="Name" />
+          <input type="text" id="name" class="inputfield w-full" pInputText placeholder="Name"
+            formControlName="name" />
         </div>
         <div class="field col-4">
           <p-inputNumber [showButtons]="true" buttonLayout="horizontal" inputId="quantity" spinnerMode="horizontal"
             class="inputfield w-full" inputStyleClass="w-full text-center" placeholder="Quantity" decrementButtonClass="p-button-danger"
-            incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [min]="1">
+            incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [min]="itemMinQuantity"
+            autocomplete="off" formControlName="quantity">
           </p-inputNumber>
         </div>
         <div class="field col-2 text-right">
-          <button pButton type="button" label="Add"></button>
+          <button pButton type="submit" label="Add" [disabled]="!formAddItem.valid"></button>
         </div>
       </form>
     </p-fieldset>
-    <p-table styleClass="mt-3 p-datatable-striped" [value]="availableItems">
-      <ng-template pTemplate="header">
+    <p-table styleClass="mt-3 p-datatable-striped" [columns]="cols" [value]="availableItems" editMode="row" dataKey="id">
+      <ng-template pTemplate="header" let-columns>
         <tr>
-          <th *ngFor="let col of cols" [pSortableColumn]="col.field">
+          <th *ngFor="let col of columns" [pSortableColumn]="col.field">
             <div class="flex justify-content-between">
               <span>{{ col.header }}</span>
               <p-sortIcon [field]="col.field"></p-sortIcon>
@@ -29,21 +31,46 @@
           <th></th>
         </tr>
       </ng-template>
-      <ng-template pTemplate="body" let-item>
-        <tr>
-          <td *ngFor="let col of cols">
-            <ng-container *ngIf="col.field === 'quantity'; else defaultTemplate">
-              <p-inputNumber [showButtons]="true" buttonLayout="horizontal" inputId="quantity" spinnerMode="horizontal"
-                [min]="1" inputStyleClass="text-center w-full" decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success"
-                incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [(ngModel)]="item.quantity">
-              </p-inputNumber>
-            </ng-container>
-            <ng-template #defaultTemplate>
-              {{ item[col.field] }}
-            </ng-template>
+      <ng-template pTemplate="body" let-item let-columns="columns" let-editing="editing" let-rowIndex="rowIndex">
+        <tr [pEditableRow]="item">
+          <td *ngFor="let col of columns">
+            <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <ng-container *ngIf="col.field === 'quantity'">
+                    <p-inputNumber [showButtons]="true" buttonLayout="horizontal" inputId="quantity" spinnerMode="horizontal"
+                      [min]="itemMinQuantity" inputStyleClass="text-center w-full" decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success"
+                      incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [(ngModel)]="item.quantity">
+                    </p-inputNumber>
+                  </ng-container>
+                  <ng-container *ngIf="col.field === 'name'">
+                    <input pInputText type="text" [(ngModel)]="item.name">
+                  </ng-container>
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{ item[col.field] }}
+                </ng-template>
+            </p-cellEditor>
           </td>
           <td class="text-right">
-            <button pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger"></button>
+            <ng-container *ngIf="editing">
+              <button pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" class="p-button-rounded p-button-success"
+                (click)="updateItemDetails(item, rowIndex)"></button>
+              <button pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" class="p-button-rounded p-button-danger ml-2"
+                (click)="restoreItemDetails(item, rowIndex)"></button>
+            </ng-container>
+            <ng-container *ngIf="!editing">
+              <button pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" class="p-button-rounded p-button-warning"
+                (click)="saveEditItemDetails(item)"></button>
+              <button pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger ml-2"
+                (click)="deleteItem(item.id, item.name)"></button>
+            </ng-container>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+          <td class="py-6 text-center" attr.colspan="{{ columns.length + 1 }}">
+            No items found
           </td>
         </tr>
       </ng-template>
