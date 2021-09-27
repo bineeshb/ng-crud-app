@@ -12,7 +12,7 @@
             <p-inputNumber [ngModel]="minQuantity" [min]="minQuantity" [max]="item.quantity" inputStyleClass="text-center"
               #buyField="ngModel"></p-inputNumber>
             <button type="button" pButton pRipple label="Buy" class="p-button-danger"
-              (click)="buyItemQuantities(item, buyField.value)"></button>
+              (click)="buyItemQuantities(item, buyField)"></button>
           </div>
         </div>
       </ng-template>
@@ -34,7 +34,7 @@
             <p-inputNumber [(ngModel)]="minQuantity" [min]="minQuantity" [max]="item.quantity" inputStyleClass="text-center"
               #sellField="ngModel"></p-inputNumber>
             <button type="button" pButton pRipple label="Sell" class="p-button-success"
-              (click)="sellItemQuantities(item, sellField.value)"></button>
+              (click)="sellItemQuantities(item, sellField)"></button>
           </div>
         </div>
       </ng-template>

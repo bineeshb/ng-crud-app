@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgModel } from '@angular/forms';
 
 import { ExistingItem } from '@interfaces';
 import { MasterStoreService, UserStoreService } from '@services';
@@ -36,7 +37,9 @@ export class UserStoreComponent extends AutoUnsubscribeComponent implements OnIn
     this.addSubscriptions(storeItemsSub);
   }
 
-  buyItemQuantities(item: ExistingItem, quantity: number): void {
+  buyItemQuantities(item: ExistingItem, field: NgModel): void {
+    const quantity = field.value;
+    this.toastMessageService.clear();
     const buyItemsSub = this.masterStoreService.buyItemQuantities(item.id, { quantity }).subscribe(
       () => {
         this.fetchAndShowAvailableItems();
@@ -45,12 +48,15 @@ export class UserStoreComponent extends AutoUnsubscribeComponent implements OnIn
           summary: 'Item Bought',
           detail: `${quantity} '${item.name}' bought successfully !`
         }]);
-      }
+      },
+      () => field.control.setValue(this.minQuantity)
     );
     this.addSubscriptions(buyItemsSub);
   }
 
-  sellItemQuantities(item: ExistingItem, quantity: number): void {
+  sellItemQuantities(item: ExistingItem, field: NgModel): void {
+    const quantity = field.value;
+    this.toastMessageService.clear();
     const sellItemsSub = this.userStoreService.sellItemQuantities(item.id, { quantity }).subscribe(
       () => {
         this.fetchAndShowAvailableItems();
@@ -59,7 +65,8 @@ export class UserStoreComponent extends AutoUnsubscribeComponent implements OnIn
           summary: 'Item Sold',
           detail: `${quantity} '${item.name}' sold successfully !`
         }]);
-      }
+      },
+      () => field.control.setValue(this.minQuantity)
     );
     this.addSubscriptions(sellItemsSub);
   }
