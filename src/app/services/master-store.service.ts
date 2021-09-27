@@ -2,8 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { API_MASTER_STORE, placeholderItemID } from '@config/api-urls';
-import { Item, MessageResponse, Store } from '@interfaces';
+import { replaceItemID } from '@utils/replace-itemid';
+import { API_MASTER_STORE } from '@config/api-urls';
+import { Item, MessageResponse, Store, TradeItemRequest } from '@interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -11,10 +12,6 @@ import { Item, MessageResponse, Store } from '@interfaces';
 export class MasterStoreService {
 
   constructor(private readonly http: HttpClient) { }
-
-  private replaceItemID(url: string, itemId: string): string {
-    return url.replace(placeholderItemID, itemId);
-  }
 
   getItems(): Observable<Store> {
     return this.http.get<Store>(API_MASTER_STORE.items);
@@ -25,10 +22,14 @@ export class MasterStoreService {
   }
 
   deleteItem(deleteItemId: string): Observable<MessageResponse> {
-    return this.http.delete<MessageResponse>(this.replaceItemID(API_MASTER_STORE.item, deleteItemId));
+    return this.http.delete<MessageResponse>(replaceItemID(API_MASTER_STORE.item, deleteItemId));
   }
 
   updateItem(updateItemId: string, updateItemDetails: Item): Observable<MessageResponse> {
-    return this.http.put<MessageResponse>(this.replaceItemID(API_MASTER_STORE.item, updateItemId), updateItemDetails);
+    return this.http.put<MessageResponse>(replaceItemID(API_MASTER_STORE.item, updateItemId), updateItemDetails);
+  }
+
+  buyItemQuantities(buyItemId: string, buyItemDetails: TradeItemRequest): Observable<MessageResponse> {
+    return this.http.post<MessageResponse>(replaceItemID(API_MASTER_STORE.buyItem, buyItemId), buyItemDetails);
   }
 }

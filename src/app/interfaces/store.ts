@@ -5,3 +5,7 @@ export interface Store {
   noOfItems: number;
   items: ExistingItem[]
 }
+
+export interface TradeItemRequest {
+  quantity: number;
+}
